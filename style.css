@@ -1,0 +1,44 @@
+/*float  浮动
+  text-align：center   居中对齐
+  text-decoration：none   取消下划线
+  margin-right   设置右边距
+  font   指定字体样式
+*/
+.demo a{
+  float: left;
+  display: block;
+  height: 50px;
+  width: 50px;
+  border-radius: 10px;
+  background: deeppink;
+  text-align:center;
+  color: #ffffff;
+  text-decoration:none;
+  margin-right: 5px;
+  font:bold 20px/50px Arial;
+}
+/*  选中存在id属性的元素   a[]{}
+    属性名   属性名=属性值(正则)
+    =   绝对等于
+    *=  包含
+    ^=  以什么什么开头
+    $=  以什么什么结尾
+*/
+/*a[id]{*/
+/*  background: #ffdd00;*/
+/*}*/
+/*id=first的元素*/
+a[id=first]{
+  background: #ffdd00;
+}
+/*  class中有links的元素*/
+/*  a[class*="links"]{*/
+/*    background: darkviolet;*/
+/*  }*/
+/*  选中href属性中http开头的元素*/
+a[href^=http]{
+  background: blue;
+}
+a[href$=pdf]{
+  background: darkturquoise;
+}
