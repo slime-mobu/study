@@ -1,0 +1,65 @@
+-- 索引的使用
+-- 1、在创建表的时候给字段增加索引
+-- 2、创建完毕后，增加索引
+
+USE school
+-- 显示所有的索引信息
+SHOW INDEX FROM student
+
+-- 增加一个全文索引(索引名)  列名
+ALTER TABLE school.`student` ADD FULLTEXT INDEX `studentname`(`studentname`)
+
+-- EXPLAIN 分析sql执行的状况
+EXPLAIN SELECT * FROM student -- 非全文索引
+
+EXPLAIN SELECT * FROM student WHERE MATCH(studentname) AGAINST('刘')
+
+
+CREATE TABLE `app_user` (
+   `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+   `name` VARCHAR(50) DEFAULT '',
+   `email` VARCHAR(50) NOT NULL,
+   `phone` VARCHAR(20) DEFAULT '',
+   `gender` TINYINT(4) UNSIGNED DEFAULT '0',
+   `password` VARCHAR(100) NOT NULL DEFAULT '0',
+   `age` TINYINT(4) DEFAULT'0',
+   `create_time` DATETIME DEFAULT CURRENT_TIMESTAMP,
+   `update_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+   PRIMARY KEY (`id`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8
+
+-- 插入100万数据
+DELIMITER $$ -- 写函数之前必须要写，标志
+
+CREATE FUNCTION mock_data()
+RETURNS INT
+BEGIN
+   DECLARE num INT DEFAULT 1000000;
+   DECLARE i INT DEFAULT 0;
+   
+   WHILE i<num DO
+	-- 插入语句
+	INSERT INTO `app_user`(`name`,`email`,`phone`,`gender`,`password`,`age`)VALUES(CONCAT('用户',i),'2570819934@qq.com',CONCAT('18',FLOOR(RAND()*((999999999-100000000)+100000000))),FLOOR(RAND()*2),UUID(),FLOOR(RAND()*100));
+        SET i=i+1;
+   END WHILE;
+   RETURN i;
+
+
+END;
+
+SELECT mock_data()
+
+SELECT * FROM `app_user` WHERE `name`='用户9999'; -- 0.993 sec
+SELECT * FROM `app_user` WHERE `name`='用户9999'; -- 1.098 sec
+SELECT * FROM `app_user` WHERE `name`='用户9999'; -- 0.788 sec
+
+EXPLAIN SELECT * FROM `app_user` WHERE `name`='用户9999';
+
+-- id_表名_字段名
+-- CREATE INDEX 索引名 on 表(字段)
+CREATE INDEX id_app_user_name ON app_user(`name`);
+
+SELECT * FROM `app_user` WHERE `name`='用户9999'; -- 0.001 sec
+
+EXPLAIN SELECT * FROM `app_user` WHERE `name`='用户9999';
+
