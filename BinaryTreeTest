@@ -1,0 +1,25 @@
+package com.slimety.datastru.test;
+
+import com.slimety.datastru.tree.BinaryTree;
+
+public class BinaryTreeTest {
+    public static void main(String[] args) {
+        // 测试二叉查找树的对象
+        BinaryTree<Integer,String> tree = new BinaryTree<>();
+        // 测试插入
+        tree.put(5,"张三");
+        tree.put(2,"李四");
+        tree.put(6,"王五");
+        tree.put(7,"七七");
+        tree.put(3,"三三");
+        tree.put(4,"四四");
+        tree.put(1,"一一");
+
+        System.out.println("插入完毕的元素个数："+tree.size());
+        // 测试获取
+        System.out.println("键2对应的元素："+tree.get(2));
+        // 测试删除
+        tree.delete(2);
+        System.out.println("删除后的元素个数："+tree.size());
+    }
+}
