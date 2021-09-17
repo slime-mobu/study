@@ -1,0 +1,92 @@
+package com.test;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Stack;
+import java.util.regex.Pattern;
+
+public class Solution {
+    public int lengthOfLongestSubstring (String s) {
+        // write code here
+        if(s.length()==0){
+            return 0;
+        }
+        char[] array = s.toCharArray();
+        HashMap<Character, Integer> map = new HashMap<>();
+        map.put(array[0],0);
+        int start = 0,end = 0,maxLen = 1;
+        for(int i=1;i<s.length();i++){
+            if(map.containsKey(array[i])){
+                start = map.get(array[i])+1;
+                end = i;
+                map.put(array[i],i);
+                if((end-start+1)>maxLen){
+                    maxLen = end-start+1;
+                }
+            }else {
+                end++;
+                map.put(array[i],i);
+                if((end-start+1)>maxLen){
+                    maxLen = end-start+1;
+                }
+            }
+        }
+        return maxLen;
+    }
+    public boolean isValid (String s) {
+        // write code here
+        if(s.length()==0){
+            return false;
+        }
+        Stack<Character> stack = new Stack<>();
+        char[] array = s.toCharArray();
+        for(int i=0;i<s.length();i++){
+            if(array[i]==')'){
+                if(stack.empty()||stack.pop()!='('){
+                    return false;
+                }
+            }else if(array[i]==']'){
+                if(stack.empty()||stack.pop()!='['){
+                    return false;
+                }
+            }else if(array[i]=='}'){
+                if(stack.empty()||stack.pop()!='{'){
+                    return false;
+                }
+            }else{
+                stack.push(array[i]);
+            }
+        }
+        if (stack.empty()){
+            return true;
+        }else {
+            return false;
+        }
+    }
+    public boolean isMatch (String s, String p) {
+        // write code here
+        StringBuffer regStr = new StringBuffer();
+        for(int i=0;i<p.length();i++){
+            if(p.charAt(i)=='?'){
+                regStr.append("\\w");
+            }else if(p.charAt(i)=='*'){
+                regStr.append("[\\w]*");
+            }else{
+                regStr.append(p.charAt(i));
+            }
+        }
+        if(s.matches(regStr.toString())){
+            return true;
+        }else {
+            return false;
+        }
+
+    }
+
+    public static void main(String[] args) {
+        String s = "([])";
+        Solution solution = new Solution();
+        System.out.println(solution.isValid(s));
+    }
+}
